@@ -128,12 +128,38 @@ The binary will be at `target/release/panoptico` (`panoptico.exe` on Windows).
 
 ### Download Prebuilt Binaries
 
-Each tagged release publishes prebuilt binaries for Windows (x86_64) and Linux (x86_64) on the [Releases page](https://github.com/BolivarTech/panoptico/releases). Asset naming is stable for CI consumption:
+Each tagged release publishes prebuilt binaries on the [Releases page](https://github.com/BolivarTech/panoptico/releases) for the two platforms most common in DevOps pipelines:
 
-- `panoptico-vX.Y.Z-x86_64-pc-windows-msvc.zip`
-- `panoptico-vX.Y.Z-x86_64-unknown-linux-gnu.tar.gz`
+| Platform | Asset | Compatibility |
+|---|---|---|
+| Windows x86_64 | `panoptico-vX.Y.Z-x86_64-pc-windows-msvc.zip` | Windows 10/11, Windows Server 2019+ |
+| Linux x86_64 (Debian/Ubuntu) | `panoptico-vX.Y.Z-x86_64-unknown-linux-gnu.tar.gz` | Debian 11+, Ubuntu 20.04+, and other glibc-based distros with OpenSSL 3.x |
 
-Each archive ships with a matching `.sha256` checksum file.
+> [!NOTE]
+> The Linux binary is built on Ubuntu (glibc + OpenSSL 3.x) — the target environment of most DevOps runners (Azure Pipelines, GitHub Actions, GitLab CI, Jenkins on Debian/Ubuntu agents). It is **not** compatible with musl-based distributions (Alpine, etc.); for those, build from source.
+
+Each archive ships with a matching `.sha256` checksum file for integrity verification, and bundles `LICENSE-MIT`, `LICENSE-APACHE`, and `README.md` alongside the binary.
+
+**Consuming from a pipeline:**
+
+```bash
+# Linux
+VERSION="v1.1.0"
+ASSET="panoptico-${VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+curl -fsSL "https://github.com/BolivarTech/panoptico/releases/download/${VERSION}/${ASSET}" -o "${ASSET}"
+curl -fsSL "https://github.com/BolivarTech/panoptico/releases/download/${VERSION}/${ASSET}.sha256" | sha256sum -c -
+tar -xzf "${ASSET}"
+./panoptico-${VERSION}-x86_64-unknown-linux-gnu/panoptico --help
+```
+
+```powershell
+# Windows
+$Version = "v1.1.0"
+$Asset = "panoptico-$Version-x86_64-pc-windows-msvc.zip"
+Invoke-WebRequest "https://github.com/BolivarTech/panoptico/releases/download/$Version/$Asset" -OutFile $Asset
+Expand-Archive $Asset -DestinationPath .
+& ".\panoptico-$Version-x86_64-pc-windows-msvc\panoptico.exe" --help
+```
 
 ### Generate Default Configuration
 
