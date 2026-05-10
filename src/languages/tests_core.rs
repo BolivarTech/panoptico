@@ -1,5 +1,5 @@
 // Author: Julian Bolivar
-// Version: 0.0.1
+// Version: 1.1.0
 // Date: 2026-02-12
 
 //! Exhaustive tests for core types, registry, and utilities — TDD Red Phase.
