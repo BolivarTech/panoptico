@@ -5,7 +5,7 @@
 //! AI Code Reviewer CLI entry point.
 //!
 //! Parses command-line arguments, optionally loads a TOML config file,
-//! and delegates execution to [`PrAiReviewer`].
+//! and delegates execution to [`Panoptico`].
 
 use std::process;
 
@@ -14,7 +14,7 @@ use clap::{Parser, Subcommand};
 use panoptico::config::{
     parse_backend, parse_parallel, ConfigFile, ReviewConfig, DEFAULT_CONFIG_FILENAME,
 };
-use panoptico::{Command, PrAiReviewer};
+use panoptico::{Command, Panoptico};
 
 /// AI-powered code review CLI for Pull Requests using Claude.
 #[derive(Parser)]
@@ -329,7 +329,7 @@ async fn main() {
         },
     };
 
-    let reviewer = PrAiReviewer::new(config);
+    let reviewer = Panoptico::new(config);
     if let Err(e) = reviewer.run(command).await {
         eprintln!("Error: {}", e);
         process::exit(1);

@@ -4,8 +4,8 @@
 
 //! Core application class — orchestrates the full review pipeline.
 //!
-//! [`PrAiReviewer`] is the main entry point of the library. It holds
-//! a [`ReviewConfig`] and exposes [`run`](PrAiReviewer::run) to
+//! [`Panoptico`] is the main entry point of the library. It holds
+//! a [`ReviewConfig`] and exposes [`run`](Panoptico::run) to
 //! dispatch test or review commands.
 
 use std::collections::{HashMap, HashSet};
@@ -92,19 +92,19 @@ pub enum Command {
 /// # Examples
 ///
 /// ```
-/// use panoptico::reviewer::{PrAiReviewer, Command};
+/// use panoptico::reviewer::{Panoptico, Command};
 /// use panoptico::config::ReviewConfig;
 ///
 /// let config = ReviewConfig::default();
-/// let reviewer = PrAiReviewer::new(config);
+/// let reviewer = Panoptico::new(config);
 /// assert_eq!(reviewer.config().model, "claude-sonnet-4-5");
 /// ```
-pub struct PrAiReviewer {
+pub struct Panoptico {
     /// Session configuration.
     config: ReviewConfig,
 }
 
-impl PrAiReviewer {
+impl Panoptico {
     /// Create a new reviewer with the given configuration.
     ///
     /// # Arguments
@@ -869,7 +869,7 @@ mod tests {
             model: "test-model".to_string(),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         assert_eq!(reviewer.config().model, "test-model");
     }
 
@@ -880,7 +880,7 @@ mod tests {
             json_output: true,
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         assert_eq!(reviewer.config().backend, BackendType::ClaudeCode);
         assert!(reviewer.config().json_output);
     }
@@ -915,7 +915,7 @@ mod tests {
             key_password: Some("my-password".to_string()),
             semantic: false,
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let c = reviewer.config();
         assert_eq!(c.backend, BackendType::AzureAiFoundry);
         assert_eq!(c.model, "claude-haiku-4-5");
@@ -976,7 +976,7 @@ mod tests {
 
         let _cwd = CwdGuard::new(dir.path());
 
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.generate_config();
 
         assert!(result.is_err(), "Should refuse to overwrite existing file");
@@ -994,7 +994,7 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let _cwd = CwdGuard::new(dir.path());
 
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.generate_config();
 
         assert!(result.is_ok(), "Should create config file successfully");
@@ -1013,7 +1013,7 @@ mod tests {
         let dir = tempfile::tempdir().unwrap();
         let _cwd = CwdGuard::new(dir.path());
 
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.generate_prompt();
 
         assert!(result.is_ok(), "Should create prompt file successfully");
@@ -1033,7 +1033,7 @@ mod tests {
 
         let _cwd = CwdGuard::new(dir.path());
 
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.generate_prompt();
 
         assert!(result.is_err(), "Should refuse to overwrite existing file");
@@ -1047,7 +1047,7 @@ mod tests {
 
     #[test]
     fn resolve_system_prompt_uses_default_when_no_path() {
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let prompt = reviewer.resolve_system_prompt().unwrap();
         assert!(
             prompt.contains("expert code reviewer"),
@@ -1065,7 +1065,7 @@ mod tests {
             system_prompt_path: Some(file_path.to_string_lossy().to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let prompt = reviewer.resolve_system_prompt().unwrap();
         assert_eq!(prompt, "Only report MISRA C violations.");
     }
@@ -1076,7 +1076,7 @@ mod tests {
             system_prompt_path: Some("nonexistent-prompt.txt".to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let result = reviewer.resolve_system_prompt();
         assert!(result.is_err(), "Should return error for missing file");
         let msg = format!("{}", result.unwrap_err());
@@ -1173,7 +1173,7 @@ mod tests {
             json_output: true,
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let review = sample_review();
         let result = reviewer.output_review(&review);
         assert!(result.is_ok(), "JSON output should not fail");
@@ -1185,7 +1185,7 @@ mod tests {
             json_output: false,
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let review = sample_review();
         let result = reviewer.output_review(&review);
         assert!(result.is_ok(), "Human-readable output should not fail");
@@ -1200,7 +1200,7 @@ mod tests {
             output_path: Some(file_path.to_string_lossy().to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let review = sample_review();
         reviewer.output_review(&review).unwrap();
 
@@ -1219,7 +1219,7 @@ mod tests {
             output_path: Some(file_path.to_string_lossy().to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let review = sample_review();
         reviewer.output_review(&review).unwrap();
 
@@ -1235,7 +1235,7 @@ mod tests {
             output_path: Some("/nonexistent/dir/report.txt".to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let review = sample_review();
         let result = reviewer.output_review(&review);
         assert!(result.is_err(), "Writing to invalid path should fail");
@@ -1319,7 +1319,7 @@ mod tests {
         )
         .unwrap();
 
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.encrypt_key(
             "password123",
             "sk-test-key",
@@ -1357,7 +1357,7 @@ endpoint = \"https://my-endpoint.com\"\n\
 credential_source = \"encrypted\"\n";
         std::fs::write(&toml_path, original).unwrap();
 
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         reviewer
             .encrypt_key("pass", "sk-key", Some(toml_path.to_str().unwrap()))
             .unwrap();
@@ -1401,7 +1401,7 @@ credential_source = \"encrypted\"\n";
         let toml_path = dir.path().join("panoptico.toml");
         std::fs::write(&toml_path, "[review]\nmodel = \"claude-sonnet-4-5\"\n").unwrap();
 
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         reviewer
             .encrypt_key("pass", "sk-key", Some(toml_path.to_str().unwrap()))
             .unwrap();
@@ -1421,14 +1421,14 @@ credential_source = \"encrypted\"\n";
 
     #[test]
     fn encrypt_key_skips_update_when_no_config_path() {
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.encrypt_key("pass", "sk-key", None);
         assert!(result.is_ok(), "Should succeed without config path");
     }
 
     #[test]
     fn encrypt_key_skips_update_when_file_missing() {
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.encrypt_key("pass", "sk-key", Some("/nonexistent/file.toml"));
         assert!(
             result.is_ok(),
@@ -1475,7 +1475,7 @@ credential_source = \"encrypted\"\n";
 
     #[test]
     fn build_credential_source_env_succeeds() {
-        let reviewer = PrAiReviewer::new(ReviewConfig::default());
+        let reviewer = Panoptico::new(ReviewConfig::default());
         let result = reviewer.build_credential_source();
         assert!(result.is_ok(), "Env source should always succeed");
     }
@@ -1487,7 +1487,7 @@ credential_source = \"encrypted\"\n";
             api_key_encrypted: None,
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let result = reviewer.build_credential_source();
         assert!(
             matches!(result, Err(ReviewError::Config(ref msg)) if msg.contains("api_key_encrypted")),
@@ -1503,7 +1503,7 @@ credential_source = \"encrypted\"\n";
             api_key_encrypted: Some(String::new()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let result = reviewer.build_credential_source();
         assert!(
             matches!(result, Err(ReviewError::Config(_))),
@@ -1519,7 +1519,7 @@ credential_source = \"encrypted\"\n";
             vault_secret_name: Some("secret".to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let result = reviewer.build_credential_source();
         assert!(
             matches!(result, Err(ReviewError::Config(ref msg)) if msg.contains("vault_url")),
@@ -1536,7 +1536,7 @@ credential_source = \"encrypted\"\n";
             vault_secret_name: None,
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let result = reviewer.build_credential_source();
         assert!(
             matches!(result, Err(ReviewError::Config(ref msg)) if msg.contains("vault_secret_name")),
@@ -1553,7 +1553,7 @@ credential_source = \"encrypted\"\n";
             vault_secret_name: Some("api-key".to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let result = reviewer.build_credential_source();
         assert!(result.is_ok(), "Valid vault config should succeed");
     }
@@ -1565,7 +1565,7 @@ credential_source = \"encrypted\"\n";
             api_key_encrypted: Some("base64blob==".to_string()),
             ..Default::default()
         };
-        let reviewer = PrAiReviewer::new(config);
+        let reviewer = Panoptico::new(config);
         let result = reviewer.build_credential_source();
         assert!(result.is_ok(), "Valid encrypted config should succeed");
     }

@@ -10,17 +10,17 @@
 //!
 //! # Architecture
 //!
-//! The main entry point is [`PrAiReviewer`], which orchestrates the full
+//! The main entry point is [`Panoptico`], which orchestrates the full
 //! review pipeline. Create an instance with a [`config::ReviewConfig`]
-//! and call [`PrAiReviewer::run`] with a [`Command`].
+//! and call [`Panoptico::run`] with a [`Command`].
 //!
 //! ```no_run
-//! use panoptico::{PrAiReviewer, Command};
+//! use panoptico::{Panoptico, Command};
 //! use panoptico::config::ReviewConfig;
 //!
 //! # async fn example() -> Result<(), panoptico::error::ReviewError> {
 //! let config = ReviewConfig::default();
-//! let reviewer = PrAiReviewer::new(config);
+//! let reviewer = Panoptico::new(config);
 //! reviewer.run(Command::Test).await?;
 //! # Ok(())
 //! # }
@@ -43,7 +43,7 @@ pub mod reviewer;
 pub mod validator;
 
 // Re-export the primary public API at crate root.
-pub use reviewer::{Command, PrAiReviewer};
+pub use reviewer::{Command, Panoptico};
 
 /// Shared synchronization primitives for tests that mutate process-global state.
 ///
