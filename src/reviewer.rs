@@ -92,7 +92,7 @@ pub enum Command {
 /// # Examples
 ///
 /// ```
-/// use panoptico::reviewer::{Panoptico, Command};
+/// use panoptico::{Panoptico, Command};
 /// use panoptico::config::ReviewConfig;
 ///
 /// let config = ReviewConfig::default();
