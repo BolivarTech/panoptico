@@ -115,16 +115,25 @@ Git Diff --> Hunk Parser --> Batch Builder --> Map (LLM) --> Reduce --> Validato
 
 ```bash
 # GitHub:
-git clone https://github.com/<your-org>/Panoptico.git
+git clone https://github.com/BolivarTech/panoptico.git
 
 # Azure DevOps:
 git clone https://dev.azure.com/<your-org>/<your-project>/_git/Panoptico
 
-cd Panoptico
+cd panoptico
 cargo build --release
 ```
 
 The binary will be at `target/release/panoptico` (`panoptico.exe` on Windows).
+
+### Download Prebuilt Binaries
+
+Each tagged release publishes prebuilt binaries for Windows (x86_64) and Linux (x86_64) on the [Releases page](https://github.com/BolivarTech/panoptico/releases). Asset naming is stable for CI consumption:
+
+- `panoptico-vX.Y.Z-x86_64-pc-windows-msvc.zip`
+- `panoptico-vX.Y.Z-x86_64-unknown-linux-gnu.tar.gz`
+
+Each archive ships with a matching `.sha256` checksum file.
 
 ### Generate Default Configuration
 
