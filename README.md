@@ -20,10 +20,6 @@ Standalone Rust binary that integrates into CI/CD pipelines (Azure Pipelines, Gi
 
 The name *Panoptico* is the Spanish form of **panopticon**, the institutional architecture conceived by English philosopher **Jeremy Bentham** in 1791: a single observer at the center can watch every cell without being seen, so the inmates self-discipline as if always observed. **Michel Foucault** later took the panopticon as the canonical metaphor for modern disciplinary power — visibility producing behavior. This tool inherits the idea, not the dystopia: every diff is examined as if a senior reviewer were present at every Pull Request, without anyone having to be.
 
-### Why not GitHub Copilot CLI?
-
-The previous implementation used GitHub Copilot CLI (~800 lines of PowerShell), which worked but was limited by **per-user request quotas** — Copilot CLI is designed for interactive developer use, not CI/CD pipelines. This implementation calls Claude models directly through **corporate Azure AI endpoints** via the API, removing rate-limit constraints and enabling full control over model selection, batching, and output format.
-
 ---
 
 ## Table of Contents
