@@ -54,11 +54,11 @@ The name *Panoptico* is the Spanish form of **panopticon**, the institutional ar
 
 ## Code Privacy
 
-1. **Corporate endpoint only** — Code diffs are sent to a corporate Azure AI endpoint that has been verified and certified under organizational security policies. No data is routed through public consumer APIs.
+1. **Configurable endpoint** — You choose where your code goes. Panoptico supports private Azure AI Foundry deployments, the direct Anthropic API, AWS Bedrock, or local Claude Code (OAuth) — there is no hardcoded destination. Select the backend that matches your data governance requirements.
 
-2. **Data minimization** — The tool processes diffs locally on the build agent and only sends the relevant hunk context to the AI model. Full source code never leaves the build agent. This significantly reduces corporate data exposure compared to solutions that send entire files or repositories to external APIs.
+2. **Data minimization** — The tool processes diffs locally on the build agent and sends only the relevant hunk context to the AI model. Full source code never leaves the build agent. This limits the surface of code exposure compared to solutions that ingest entire files or repositories.
 
-3. **No persistent storage** — The AI endpoint processes each request statelessly; reviewed code is not stored, logged, or used for model training.
+3. **Stateless processing** — Anthropic's APIs (direct, AWS Bedrock, Azure AI Foundry) process each request statelessly and contractually exclude API traffic from model training. Verify your chosen backend's specific data handling policy before adopting it for sensitive code.
 
 4. **Encrypted credentials** — API keys can be stored as AES-256-GCM-SIV encrypted blobs (Argon2 KDF + Reed-Solomon error correction) in configuration files or pipeline secret variables, avoiding plaintext secrets in any environment.
 
