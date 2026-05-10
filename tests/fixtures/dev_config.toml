@@ -1,0 +1,11 @@
+[review]
+model = "claude-sonnet-4-5"
+backend = "claude-code"
+max_lines_per_batch = 300
+extensions = ["*.c", "*.h", "*.rs"]
+
+[review.cache]
+enabled = false
+
+[review.cost]
+report = true

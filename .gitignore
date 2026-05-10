@@ -1,0 +1,19 @@
+# Build
+/target
+Cargo.lock
+
+# IDE Files
+.idea/
+*.swp
+*.swo
+
+# Claude Files
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+
+# Local config (may contain encrypted credentials)
+panoptico.toml
+
+# Local debug output
+debug.log

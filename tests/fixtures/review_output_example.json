@@ -1,0 +1,45 @@
+{
+  "summary": "The changes introduce a new retry mechanism for API calls and update error handling in the authentication module. Overall quality is good with a few areas for improvement.",
+  "findings": [
+    {
+      "severity": "critical",
+      "file": "src/backend/azure_foundry.rs",
+      "line": 142,
+      "title": "Unbounded retry loop on 429 responses",
+      "description": "The retry loop has no maximum attempt limit. A persistent 429 from the server will cause the process to hang indefinitely.",
+      "suggestion": "Add a max_retries constant (e.g., 5) and break out of the loop after exceeding it, returning ReviewError::Api.",
+      "category": "error-handling",
+      "findingId": "3a6290ae9c2c4c3d"
+    },
+    {
+      "severity": "warning",
+      "file": "src/credential.rs",
+      "line": 73,
+      "title": "Env var read not wrapped in zeroizing guard",
+      "description": "The plaintext API key from std::env::var remains in memory after use. If the process dumps core, the key could be exposed.",
+      "suggestion": "Wrap the returned String in zeroize::Zeroizing<String> so it is scrubbed on drop.",
+      "category": "hardcoded-secret",
+      "findingId": "c0732e48dfbaab43"
+    },
+    {
+      "severity": "suggestion",
+      "file": "src/config.rs",
+      "line": 295,
+      "title": "Magic number for default max_concurrent",
+      "description": "The value 4 is used directly without a named constant, making it harder to discover and change.",
+      "suggestion": "Extract to a const DEFAULT_MAX_CONCURRENT: usize = 4 at module level.",
+      "category": "style",
+      "findingId": "0d72b7a00bd4426f"
+    },
+    {
+      "severity": "positive",
+      "file": "src/crypto.rs",
+      "line": 210,
+      "title": "Good use of nonce-misuse resistant cipher",
+      "description": "AES-256-GCM-SIV is an excellent choice for this use case -- it tolerates accidental nonce reuse without catastrophic failure.",
+      "suggestion": "",
+      "category": "performance",
+      "findingId": "c805fb3230cdac55"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "msg_01XFDUDYJgAACzvnptvVoYEL",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-sonnet-4-5",
+  "content": [
+    {
+      "type": "tool_use",
+      "id": "toolu_01A09q90qw90lq917835lq9",
+      "name": "record_code_review",
+      "input": {
+        "summary": "Buffer overflow vulnerability found in main.c",
+        "findings": [
+          {
+            "severity": "critical",
+            "file": "src/main.c",
+            "line": 42,
+            "title": "Buffer overflow in parse_input",
+            "description": "Buffer is 256 bytes but input is unchecked.",
+            "suggestion": "Add length validation before memcpy.",
+            "category": "buffer-overflow"
+          },
+          {
+            "severity": "suggestion",
+            "file": "src/main.c",
+            "line": 10,
+            "title": "Missing include guard",
+            "description": "Header lacks pragma once.",
+            "suggestion": "Add #pragma once.",
+            "category": "style"
+          }
+        ]
+      }
+    }
+  ],
+  "stop_reason": "tool_use",
+  "usage": {
+    "input_tokens": 1523,
+    "output_tokens": 387,
+    "cache_creation_input_tokens": 1200,
+    "cache_read_input_tokens": 0
+  }
+}

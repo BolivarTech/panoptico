@@ -1,0 +1,8 @@
+{
+  "type": "result",
+  "subtype": "success",
+  "is_error": false,
+  "result": "{\"summary\":\"Race condition detected in thread pool.\",\"findings\":[{\"severity\":\"warning\",\"file\":\"src/pool.c\",\"line\":88,\"title\":\"Data race on shared counter\",\"description\":\"Counter accessed without mutex protection.\",\"suggestion\":\"Add pthread_mutex_lock before counter access.\"}]}",
+  "total_cost_usd": 0.0034,
+  "duration_ms": 2847
+}

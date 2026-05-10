@@ -1,0 +1,87 @@
+parameters:
+  - name: generateDocs
+    displayName: 'Generate API documentation'
+    type: boolean
+    default: false
+
+trigger:
+  branches:
+    include:
+      - main
+
+pr:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  CARGO_TERM_COLOR: 'always'
+  RUSTFLAGS: '-D warnings'
+
+stages:
+  - stage: Test
+    displayName: 'Test'
+    jobs:
+      - job: Test
+        displayName: 'Run tests'
+        steps:
+          - pwsh: |
+              Invoke-WebRequest -Uri https://win.rustup.rs/x86_64 -OutFile rustup-init.exe
+              .\rustup-init.exe -y --default-toolchain stable
+              echo "##vso[task.prependpath]$env:USERPROFILE\.cargo\bin"
+            displayName: 'Install Rust toolchain'
+
+          - script: rustc --version && cargo --version
+            displayName: 'Print Rust version'
+
+          - script: cargo fmt --check
+            displayName: 'Check formatting'
+
+          - script: cargo clippy -- -D warnings
+            displayName: 'Run clippy lints'
+
+          - script: cargo test
+            displayName: 'Run tests'
+
+  - stage: Build
+    displayName: 'Build'
+    dependsOn: Test
+    condition: succeeded()
+    jobs:
+      - job: Release
+        displayName: 'Build release binary'
+        steps:
+          - pwsh: |
+              Invoke-WebRequest -Uri https://win.rustup.rs/x86_64 -OutFile rustup-init.exe
+              .\rustup-init.exe -y --default-toolchain stable
+              echo "##vso[task.prependpath]$env:USERPROFILE\.cargo\bin"
+            displayName: 'Install Rust toolchain'
+
+          - script: cargo build --release
+            displayName: 'Compile release build'
+
+          - script: cargo doc --no-deps
+            displayName: 'Generate API documentation'
+            condition: eq('${{ parameters.generateDocs }}', 'true')
+
+          - pwsh: |
+              if (Test-Path 'docs\doc') { Remove-Item -Recurse -Force 'docs\doc' }
+              Copy-Item -Recurse 'target\doc' 'docs\doc'
+            displayName: 'Copy docs to docs\doc'
+            condition: eq('${{ parameters.generateDocs }}', 'true')
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish release artifact'
+            inputs:
+              targetPath: 'target\release\panoptico.exe'
+              artifact: 'panoptico-windows'
+
+          - task: PublishPipelineArtifact@1
+            displayName: 'Publish API documentation'
+            condition: eq('${{ parameters.generateDocs }}', 'true')
+            inputs:
+              targetPath: 'docs\doc'
+              artifact: 'api-documentation'

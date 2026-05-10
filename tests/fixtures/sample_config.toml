@@ -1,0 +1,24 @@
+[review]
+model = "claude-sonnet-4-5"
+fallback_model = "claude-haiku-4-5"
+backend = "azure"
+max_lines_per_batch = 500
+instructions = "review-instructions.md"
+extensions = ["*.c", "*.cpp", "*.h", "*.py", "*.rs"]
+parallel = "hybrid"
+max_concurrent = 4
+
+[review.cache]
+enabled = true
+
+[review.cost]
+report = true
+
+[azure]
+endpoint = "https://your-resource.services.ai.azure.com/anthropic/"
+credential_source = "env"
+
+[platform]
+type = "azure-devops"
+org_url = "https://dev.azure.com/your-organization"
+project = "your-project"
