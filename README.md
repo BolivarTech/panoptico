@@ -642,7 +642,7 @@ Their verdicts are reconciled through weight-based consensus voting, producing a
 
 **Production track record.** MAGI is already shipping as a [Claude Code plugin and Gemini CLI plugin](https://github.com/BolivarTech/magi), where it has delivered **exceptional performance in real-world use** — markedly reducing single-perspective bias on architectural reviews, design decisions, and code analysis. Users report sharper recommendations and far fewer overlooked edge cases than single-agent dispatch.
 
-**Integration plan for Panoptico.** A future release will embed [magi-core](https://github.com/BolivarTech/magi-core) — the LLM-agnostic Rust implementation of the methodology — directly into the review pipeline. Each batch will be routed through Melchior / Balthasar / Caspar before a finding is emitted.
+**Integration plan for Panoptico.** A future release will embed [magi-core](https://github.com/BolivarTech/magi-core) — the **native Rust implementation of MAGI**, LLM-agnostic by design — directly into the review pipeline. Each batch will be routed through Melchior / Balthasar / Caspar before a finding is emitted.
 
 Expected benefits:
 
