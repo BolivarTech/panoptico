@@ -1,10 +1,12 @@
 # Panoptico
 
-[![License: MIT OR Apache-2.0](https://img.shields.io/badge/License-MIT_OR_Apache--2.0-blue.svg)](#license)
+[![License](https://img.shields.io/github/license/BolivarTech/panoptico?label=license)](#license)
+[![Release](https://img.shields.io/github/v/release/BolivarTech/panoptico?display_name=tag&sort=semver)](https://github.com/BolivarTech/panoptico/releases/latest)
+[![CI](https://img.shields.io/github/actions/workflow/status/BolivarTech/panoptico/ci.yml?branch=main&label=tests)](https://github.com/BolivarTech/panoptico/actions/workflows/ci.yml)
+[![Last commit](https://img.shields.io/github/last-commit/BolivarTech/panoptico/main)](https://github.com/BolivarTech/panoptico/commits/main)
+[![Downloads](https://img.shields.io/github/downloads/BolivarTech/panoptico/total)](https://github.com/BolivarTech/panoptico/releases)
 [![Rust](https://img.shields.io/badge/rust-1.70%2B-orange.svg?logo=rust)](https://www.rust-lang.org)
 [![Edition](https://img.shields.io/badge/edition-2021-blue.svg)](https://doc.rust-lang.org/edition-guide/rust-2021/index.html)
-[![Version](https://img.shields.io/badge/version-1.1.0-green.svg)](Cargo.toml)
-[![Tests](https://img.shields.io/badge/tests-507_passing-success.svg)](#development)
 [![Code style: rustfmt](https://img.shields.io/badge/code_style-rustfmt-brightgreen.svg)](https://github.com/rust-lang/rustfmt)
 [![Lint: clippy](https://img.shields.io/badge/lint-clippy-blue.svg)](https://github.com/rust-lang/rust-clippy)
 [![Powered by Claude](https://img.shields.io/badge/powered_by-Claude-D97757.svg)](https://www.anthropic.com/claude)
