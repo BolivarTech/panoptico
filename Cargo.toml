@@ -2,9 +2,15 @@
 name = "panoptico"
 version = "1.1.0"
 edition = "2021"
+rust-version = "1.70"
 authors = ["Julian Bolivar"]
 license = "MIT OR Apache-2.0"
 description = "AI-powered code review CLI for Pull Requests using Claude"
+repository = "https://github.com/BolivarTech/panoptico"
+documentation = "https://docs.rs/panoptico"
+readme = "README.md"
+keywords = ["code-review", "ai", "pull-request", "claude", "cli"]
+categories = ["command-line-utilities", "development-tools"]
 
 [[bin]]
 name = "panoptico"
