@@ -630,17 +630,27 @@ Retrieval-Augmented Generation will let the reviewer pull additional context bey
 
 The expected effect is a meaningful reduction in context-blind hallucinations (e.g., flagging a function as missing when it is defined in a sibling module).
 
-### Multi-perspective consensus via MAGI-core
+### Multi-perspective consensus via MAGI
 
-[MAGI-core](https://github.com/BolivarTech/magi-core) is an LLM-agnostic multi-perspective analysis system in Rust, inspired by the MAGI supercomputers from *Neon Genesis Evangelion*. The integration will dispatch each batch through three independent perspectives — for example *security-focused*, *maintainability-focused*, and *performance-focused* — and resolve disagreements via majority vote before emitting a finding.
+The **MAGI methodology** — inspired by the MAGI supercomputers from *Neon Genesis Evangelion* — dispatches every query through three independent AI personas with distinct lenses:
+
+- **Melchior** — scientist (rigor, evidence, formal correctness)
+- **Balthasar** — pragmatist (maintainability, real-world tradeoffs, ergonomics)
+- **Caspar** — adversarial (failure modes, edge cases, attacker mindset)
+
+Their verdicts are reconciled through weight-based consensus voting, producing a single answer plus a quantifiable agreement signal.
+
+**Production track record.** MAGI is already shipping as a [Claude Code plugin and Gemini CLI plugin](https://github.com/BolivarTech/magi), where it has delivered **exceptional performance in real-world use** — markedly reducing single-perspective bias on architectural reviews, design decisions, and code analysis. Users report sharper recommendations and far fewer overlooked edge cases than single-agent dispatch.
+
+**Integration plan for Panoptico.** A future release will embed [magi-core](https://github.com/BolivarTech/magi-core) — the LLM-agnostic Rust implementation of the methodology — directly into the review pipeline. Each batch will be routed through Melchior / Balthasar / Caspar before a finding is emitted.
 
 Expected benefits:
 
-- **Lower false positive rate** — findings that only one persona detects are demoted or dropped, reducing single-perspective noise.
-- **Confidence scoring built in** — agreement across personas becomes a measurable confidence signal attached to each finding.
-- **LLM-agnostic dispatch** — MAGI-core abstracts the backend, so the three perspectives can use different models (e.g., one Claude Opus, two Claude Sonnet) for cost/quality balance.
+- **Lower false positive rate** — findings only one persona detects are demoted or dropped, reducing single-perspective noise.
+- **Built-in confidence scoring** — agreement across personas becomes a measurable confidence signal attached to each finding.
+- **LLM-agnostic dispatch** — `magi-core` abstracts the backend, so the three perspectives can use different models (e.g., one Claude Opus, two Claude Sonnet) for cost/quality balance.
 
-Combined, RAG (context) and MAGI-core (consensus) target the two largest sources of remaining false positives: incomplete information and single-perspective bias.
+Combined, RAG (context) and MAGI (consensus) target the two largest sources of remaining false positives: incomplete information and single-perspective bias.
 
 ---
 
